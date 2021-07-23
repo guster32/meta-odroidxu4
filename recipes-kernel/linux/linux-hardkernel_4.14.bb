@@ -4,13 +4,13 @@ LICENSE = "GPLv2"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 
-KBRANCH = "odroidxu4-4.9.y"
+KBRANCH = "odroidxu4-4.14.y"
 
 SRC_URI = "git://github.com/hardkernel/linux.git;branch=${KBRANCH} \
     https://dn.odroid.com/toolchains/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz \
     "
 #http://dn.odroid.com/ODROID-XU/compiler/arm-eabi-4.6.tar.gz
-SRCREV = "36c916d8319750d911433999573c79194147aee0"
+SRCREV = "864c4519b77763274b61a035b33bc92f71084b59"
 SRC_URI[sha256sum] = "0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d4f1891"
 #SRC_URI[sha256sum] = "4df101f7defe41f28551f78cf8a2da32c95fd85e6ad1ad4a8b7ef6564ca0b6f6"
 
@@ -18,13 +18,13 @@ PV = "${LINUX_VERSION}+git${SRCPV}"
 
 KCONF_BSP_AUDIT_LEVEL = "0"
 
-inherit kernel
+#inherit kernel
 
 S = "${WORKDIR}/git"
 B = "${S}"
 
 KBUILD_DEFCONFIG = "odroidxu4_defconfig"
-LINUX_VERSION ?= "4.9.y"
+LINUX_VERSION ?= "4.14.180"
 
 HOSTTOOLS += " bc "
 
@@ -60,7 +60,7 @@ PATH_prepend = "${WORKDIR}/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin:
 
 do_configure () {
     ln -s "${COMPILER}" "${WORKDIR}/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-oe-linux-gnueabi-gcc" | true
-    #oe_runmake mrproper
+    oe_runmake mrproper
 	oe_runmake ${KBUILD_DEFCONFIG}
 }
 
