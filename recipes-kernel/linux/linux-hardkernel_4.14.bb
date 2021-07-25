@@ -18,24 +18,20 @@ PV = "${LINUX_VERSION}+git${SRCPV}"
 
 KCONF_BSP_AUDIT_LEVEL = "0"
 
-#inherit kernel
-
 S = "${WORKDIR}/git"
 B = "${S}"
 
 KBUILD_DEFCONFIG = "odroidxu4_defconfig"
 LINUX_VERSION ?= "4.14.180"
 
-HOSTTOOLS += " bc "
+HOSTTOOLS += " dtc bc "
 
-DEPENDS += " bc-native lzop-native "
+DEPENDS += " dtc-native bc-native lzop-native "
 KERNEL_EXTRA_FEATURES = ""
 
 TOOLCHAIN_PREFIX = "arm-linux-gnueabihf-"
-#TOOLCHAIN_PREFIX = "arm-eabi-"
 
 COMPILER = "${WORKDIR}/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-gcc"
-#COMPILER = "${WORKDIR}/arm-eabi-4.6/bin/arm-eabi-gcc"
 
 EXTRA_OECONF = ""
 EXTRA_OEMAKE = ' CROSS_COMPILE="${TOOLCHAIN_PREFIX}" \
@@ -45,18 +41,15 @@ EXTRA_OEMAKE = ' CROSS_COMPILE="${TOOLCHAIN_PREFIX}" \
 	LDFLAGS="" \
 	HOSTCC="${BUILD_CC}" CPUS=${@oe.utils.cpu_count()} V=1 \
     '
-#CC="${COMPILER}"
-#CFLAGS="-w -Wno-error"
-#CXXFLAGS="-w -Wno-error"
-#CPPFLAGS="-w -Wno-error"
-#LDFLAGS=""
 
-#CPUS=${@oe.utils.cpu_count()}
-#KBUILD_CFLAGS="-w -Wno-error"
 LINAROTOOLCHAIN = "4.9"
 
-#PATH_prepend = "${WORKDIR}/arm-eabi-4.6/bin:"
 PATH_prepend = "${WORKDIR}/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin:"
+
+do_install_prepend() {
+    bbnote "custom kernel_do_install customization"
+    cp ${B}/arch/arm/boot/dts/exynos5422-odroidxu3.dtb ${B}/arch/arm/boot
+}
 
 do_configure () {
     ln -s "${COMPILER}" "${WORKDIR}/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-oe-linux-gnueabi-gcc" | true
@@ -65,7 +58,7 @@ do_configure () {
 }
 
 do_compile () {
-    TARGET_SYS="arm-linux-gnueabihf" oe_runmake
+    TARGET_SYS="arm-linux-gnueabihf" oe_runmake ${PARALLEL_MAKE}
 }
 
 
