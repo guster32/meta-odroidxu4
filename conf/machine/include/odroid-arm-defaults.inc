@@ -48,15 +48,15 @@ BOOT_PREFIX ?= "boot/"
 UBOOT_EXTRA_ENV ?= ""
 UBOOT_FILE_TITLE ?= "#"
 BOOT_PREFIX ?= ""
-UBOOT_VIDEO ?= "${@bb.utils.contains("DISTRO_FEATURES", "x11", "drm.edid_firmware=edid/1024x768.bin", " ", d)}"
-UBOOT_XTRA_CMDLINE ?=  "${@bb.utils.contains('DISTRO_FEATURES', 'TS_vu7+', 'usbhid.quirks=0x16B4:0x0703:0x00000040 ', '', d)}"
+#UBOOT_VIDEO ?= "${@bb.utils.contains("DISTRO_FEATURES", "x11", "drm.edid_firmware=edid/1024x768.bin", " ", d)}"
+#UBOOT_XTRA_CMDLINE ?=  "${@bb.utils.contains('DISTRO_FEATURES', 'TS_vu7+', 'usbhid.quirks=0x16B4:0x0703:0x00000040 ', '', d)}"
 
 IMAGE_BOOT_FILES ?= "${UBOOT_SCRIPT}"
 
 MACHINE_FEATURES_BACKFILL_CONSIDERED = "rtc"
 
 EXTRA_IMAGEDEPENDS_append = " u-boot secure-odroid"
-EXTRA_IMAGEDEPENDS_append = " ${@bb.utils.contains("DISTRO_FEATURES", "x11", " odroid-edid", " ", d)}"
+#EXTRA_IMAGEDEPENDS_append = " ${@bb.utils.contains("DISTRO_FEATURES", "x11", " odroid-edid", " ", d)}"
 IMAGE_INSTALL_append = " kernel-devicetree"
 
 IMAGE_CLASSES += "image_types_odroid"

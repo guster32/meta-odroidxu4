@@ -15,11 +15,6 @@ do_patch[noexec] = "1"
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
-do_install_odroid-c2 () {
-	install -d ${D}/boot
-    	install -m 755  ${S}/odroid-c2/bl1.bin.hardkernel ${D}/boot
-}
-
 do_install () {
     install -d ${D}/boot
     install -m 755  ${S}/bl1.bin.hardkernel ${D}/boot
@@ -53,4 +48,4 @@ addtask deploy before do_build after do_compile
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE  = "(odroid-xu3|odroid-xu4|odroid-xu3-lite|odroid-c2|odroid-hc1)"
+COMPATIBLE_MACHINE  = "odroid-xu4"

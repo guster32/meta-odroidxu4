@@ -1,0 +1,58 @@
+From eadbc158508d215334213eb67b455945014fac1c Mon Sep 17 00:00:00 2001
+From: Gustavo Branco <guster32@gmail.com>
+Date: Mon, 26 Jul 2021 23:01:39 -0700
+Subject: [PATCH] Fix Mali Gator in tree build
+
+---
+ drivers/gator/mali_midgard.mk | 37 ++++-------------------------------
+ 1 file changed, 4 insertions(+), 33 deletions(-)
+
+diff --git a/drivers/gator/mali_midgard.mk b/drivers/gator/mali_midgard.mk
+index b1405e682f7c..c4816ff2f04b 100644
+--- a/drivers/gator/mali_midgard.mk
++++ b/drivers/gator/mali_midgard.mk
+@@ -13,37 +13,8 @@ DDK_DIR ?= .
+ 
+ GATOR_MALI_MIDGARD_PATH := $(shell echo $(CONFIG_GATOR_MALI_MIDGARD_PATH))
+ 
+-ifneq ($(wildcard $(DDK_DIR)/$(GATOR_MALI_MIDGARD_PATH)/mali_kbase_gator_api.h),)
+-  # r5p0/Fluorine - ...
+-  EXTRA_CFLAGS += -DMALI_SIMPLE_API=1 \
+-                  -DMALI_DIR_MIDGARD=1 \
+-                  -I$(DDK_DIR)/$(GATOR_MALI_MIDGARD_PATH) \
++# r5p0/Fluorine - ...
++EXTRA_CFLAGS += -DMALI_SIMPLE_API=1 \
++                -DMALI_DIR_MIDGARD=1 \
++                -I$(DDK_DIR)/$(GATOR_MALI_MIDGARD_PATH) \
+ 
+-else
+-  ifneq ($(wildcard $(DDK_DIR)/$(GATOR_MALI_MIDGARD_PATH)/kbase),)
+-    # ? - r3p0
+-    KBASE_DIR = $(DDK_DIR)/$(GATOR_MALI_MIDGARD_PATH)/kbase
+-    OSK_DIR = $(DDK_DIR)/$(GATOR_MALI_MIDGARD_PATH)/kbase/osk
+-  else
+-    ifneq ($(wildcard $(DDK_DIR)/$(GATOR_MALI_MIDGARD_PATH)),)
+-      # r4p0/Europium - r4p1/Europium-Inc
+-      KBASE_DIR = $(DDK_DIR)/$(GATOR_MALI_MIDGARD_PATH)
+-      OSK_DIR = $(DDK_DIR)/$(GATOR_MALI_MIDGARD_PATH)/osk
+-      EXTRA_CFLAGS += -DMALI_DIR_MIDGARD=1
+-    endif
+-  endif
+-
+-  UMP_DIR = $(DDK_DIR)/include/linux
+-
+-  # Include directories in the DDK
+-  EXTRA_CFLAGS += -I$(KBASE_DIR)/ \
+-                  -I$(KBASE_DIR)/.. \
+-                  -I$(OSK_DIR)/.. \
+-                  -I$(UMP_DIR)/.. \
+-                  -I$(DDK_DIR)/include \
+-                  -I$(KBASE_DIR)/osk/src/linux/include \
+-                  -I$(KBASE_DIR)/platform_dummy \
+-                  -I$(KBASE_DIR)/src \
+-                  -Idrivers/staging/android \
+-
+-endif
+-- 
+2.25.1
+

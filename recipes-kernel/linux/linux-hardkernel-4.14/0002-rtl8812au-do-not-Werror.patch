@@ -1,0 +1,25 @@
+From b1ff0f7be83c005e29b8de21e9b030477b430211 Mon Sep 17 00:00:00 2001
+From: Gustavo Branco <guster32@gmail.com>
+Date: Mon, 26 Jul 2021 23:39:00 -0700
+Subject: [PATCH] rtl8812au do not Werror
+
+---
+ drivers/net/wireless/rtl8812au/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/rtl8812au/Makefile b/drivers/net/wireless/rtl8812au/Makefile
+index 1499f1da1ab7..63cf32912732 100644
+--- a/drivers/net/wireless/rtl8812au/Makefile
++++ b/drivers/net/wireless/rtl8812au/Makefile
+@@ -3,7 +3,7 @@ EXTRA_CFLAGS += -O1
+ #EXTRA_CFLAGS += -O3
+ EXTRA_CFLAGS += -Wall
+ #EXTRA_CFLAGS += -Wextra
+-EXTRA_CFLAGS += -Werror
++#EXTRA_CFLAGS += -Werror
+ #EXTRA_CFLAGS += -pedantic
+ #EXTRA_CFLAGS += -Wshadow -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wmissing-prototypes
+ EXTRA_CFLAGS += -Wframe-larger-than=1536
+-- 
+2.25.1
+

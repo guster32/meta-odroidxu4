@@ -1,0 +1,22 @@
+# short-description: Create SD card image with a boot partition
+# long-description:
+# Create an image that can be written onto a SD card using dd for use
+# with Odroid-xu style boards .
+# It uses BL1, BL2, Tzsw and u-boot
+#
+# The disk layout used is:
+#  -------------------------------------
+# |  Binary   | Block offset| part type |
+# |   name    | SD   | eMMC |(eMMC only)|
+#  -------------------------------------
+# | Bl1       | 1    | 0    |  1 (boot) |
+# | Bl2       | 31   | 30   |  1 (boot) |
+# | U-boot    | 63   | 62   |  1 (boot) |
+# | Tzsw      | 2111 | 2110 |  1 (boot) |
+# | Uboot Env | 2625 | 2560 |  0 (user) |
+#  -------------------------------------
+#
+part  --source bootimg-partition --ondisk mmcblk --fstype=vfat --label boot --active --align 4096 --size 16 
+part  --source rootfs --ondisk mmcblk --fstype=ext4 --label rootfs --align 4096
+
+bootloader --ptable msdos

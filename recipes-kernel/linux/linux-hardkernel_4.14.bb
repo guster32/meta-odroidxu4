@@ -4,15 +4,15 @@ LICENSE = "GPLv2"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-4.14:"
 KBRANCH = "odroidxu4-4.14.y"
 
-SRC_URI = "git://github.com/hardkernel/linux.git;branch=${KBRANCH} \
-    https://dn.odroid.com/toolchains/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz \
-    "
-#http://dn.odroid.com/ODROID-XU/compiler/arm-eabi-4.6.tar.gz
+SRC_URI = "git://github.com/hardkernel/linux.git;branch=${KBRANCH}"
+SRC_URI += "file://0001-Fix-Mali-Gator-in-tree-build.patch"
+SRC_URI += "file://0002-rtl8812au-do-not-Werror.patch"
+
 SRCREV = "864c4519b77763274b61a035b33bc92f71084b59"
 SRC_URI[sha256sum] = "0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d4f1891"
-#SRC_URI[sha256sum] = "4df101f7defe41f28551f78cf8a2da32c95fd85e6ad1ad4a8b7ef6564ca0b6f6"
 
 PV = "${LINUX_VERSION}+git${SRCPV}"
 
@@ -46,20 +46,6 @@ LINAROTOOLCHAIN = "4.9"
 
 PATH_prepend = "${WORKDIR}/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin:"
 
-do_install_prepend() {
-    bbnote "custom kernel_do_install customization"
-    cp ${B}/arch/arm/boot/dts/exynos5422-odroidxu3.dtb ${B}/arch/arm/boot
-}
-
-do_configure () {
-    ln -s "${COMPILER}" "${WORKDIR}/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-oe-linux-gnueabi-gcc" | true
-    oe_runmake mrproper
-	oe_runmake ${KBUILD_DEFCONFIG}
-}
-
-do_compile () {
-    TARGET_SYS="arm-linux-gnueabihf" oe_runmake ${PARALLEL_MAKE}
-}
-
+require recipes-kernel/linux/linux-yocto.inc
 
 COMPATIBLE_MACHINE = "odroid-xu4"
