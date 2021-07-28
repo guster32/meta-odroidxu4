@@ -21,6 +21,7 @@ SRC_URI[sha256sum] = "0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d
 
 PR = "${PV}+git${SRCPV}"
 
+DEPENDS = " python3-native"
 UBOOT_SUFFIX ?= "bin"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
@@ -67,19 +68,5 @@ do_compile_append () {
 	cp ${B}/${UBOOT_BINARY} ${S}/sd_fuse/u-boot.bin
 }
 
-# do_install_append() {
-# 	if [ -e ${B}/config.ini ]; then
-# 		install -m 644 ${B}/config.ini ${D}/boot/config-${MACHINE}-${PV}-${PR}.${UBOOT_ENV_SUFFIX}
-# 		ln -sf config-${MACHINE}-${PV}-${PR}.${UBOOT_ENV_SUFFIX} ${D}/boot/config.ini
-# 	fi
-# }
-
-# do_deploy_append() {
-# 	if [ -e ${B}/config.ini ]; then
-# 		install -m 644 ${B}/config.ini ${DEPLOYDIR}/config-${MACHINE}-${PV}-${PR}.${UBOOT_ENV_SUFFIX}
-#                 rm -f ${DEPLOYDIR}/config.ini
-# 		ln -sf config-${MACHINE}-${PV}-${PR}.${UBOOT_ENV_SUFFIX} ${DEPLOYDIR}/config.ini
-# 	fi
-# }
 
 COMPATIBLE_MACHINE = "odroid-xu4"
