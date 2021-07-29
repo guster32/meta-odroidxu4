@@ -6,7 +6,7 @@ require conf/machine/include/odroid-arm-defaults.inc
 DEFAULTTUNE = "cortexa15thf-neon-vfpv4"
 include conf/machine/include/tune-cortexa15.inc
 
-UBOOT_FDT_LOADADDR = "0x44000000"
+UBOOT_FDT_LOADADDR = "0x40800000"
 UBOOT_LOADADDR = "0x40007FC0"
 UBOOT_LOADADDRESS = "0x40007FC0"
 UBOOT_KERNEL_NAME = "zImage"
