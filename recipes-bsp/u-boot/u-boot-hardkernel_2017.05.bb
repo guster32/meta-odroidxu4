@@ -68,5 +68,20 @@ do_compile_append () {
 	cp ${B}/${UBOOT_BINARY} ${S}/sd_fuse/u-boot.bin
 }
 
+do_install_append() {
+	if [ -e ${B}/config.ini ]; then
+		install -m 644 ${B}/config.ini ${D}/boot/config-${MACHINE}-${PV}-${PR}.${UBOOT_ENV_SUFFIX}
+		ln -sf config-${MACHINE}-${PV}-${PR}.${UBOOT_ENV_SUFFIX} ${D}/boot/config.ini
+	fi
+}
+
+do_deploy_append() {
+	if [ -e ${B}/config.ini ]; then
+		install -m 644 ${B}/config.ini ${DEPLOYDIR}/config-${MACHINE}-${PV}-${PR}.${UBOOT_ENV_SUFFIX}
+                rm -f ${DEPLOYDIR}/config.ini
+		ln -sf config-${MACHINE}-${PV}-${PR}.${UBOOT_ENV_SUFFIX} ${DEPLOYDIR}/config.ini
+	fi
+}
+
 
 COMPATIBLE_MACHINE = "odroid-xu4"
