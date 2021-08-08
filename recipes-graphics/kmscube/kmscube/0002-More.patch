@@ -1,0 +1,26 @@
+From 383101986e4bb4c779cde4764b6f3a4ac0505144 Mon Sep 17 00:00:00 2001
+From: Gustavo Branco <guster32@gmail.com>
+Date: Sat, 7 Aug 2021 23:50:32 -0700
+Subject: [PATCH] More
+
+---
+ meson.build | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 8c0079b..186037a 100644
+--- a/meson.build
++++ b/meson.build
+@@ -85,12 +85,3 @@ else
+ endif
+ 
+ executable('kmscube', sources, dependencies : dep_common, install : true)
+-
+-
+-executable('texturator', files(
+-	'common.c',
+-	'drm-legacy.c',
+-	'drm-common.c',
+-	'perfcntrs.c',  # not used, but required to link
+-	'texturator.c',
+-), dependencies : dep_common, install : true)

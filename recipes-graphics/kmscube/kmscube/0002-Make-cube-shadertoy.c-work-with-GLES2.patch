@@ -1,0 +1,22 @@
+From 31eabb8f8fe05531a6b6b8a2f3f4befb3e755c19 Mon Sep 17 00:00:00 2001
+From: Gustavo Branco <guster32@gmail.com>
+Date: Sat, 7 Aug 2021 21:33:53 -0700
+Subject: [PATCH] Make cube-shadertoy.c work with GLES2
+
+---
+ cube-shadertoy.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cube-shadertoy.c b/cube-shadertoy.c
+index f20e145..1c8d7b2 100644
+--- a/cube-shadertoy.c
++++ b/cube-shadertoy.c
+@@ -383,7 +383,7 @@ static void draw_cube_shadertoy(unsigned i)
+ 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+ 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+ 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
++	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+ 	glUniform1i(gl.texture, 0); /* '0' refers to texture unit 0. */
+ 
+ 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

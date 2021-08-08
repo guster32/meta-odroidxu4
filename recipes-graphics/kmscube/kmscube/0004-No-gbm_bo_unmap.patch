@@ -1,0 +1,40 @@
+From 62e5d9e8245ac829e55fbf011fc9c556f1d1a77f Mon Sep 17 00:00:00 2001
+From: Gustavo Branco <guster32@gmail.com>
+Date: Sun, 8 Aug 2021 00:45:11 -0700
+Subject: [PATCH] No gbm_bo_unmap
+
+---
+ cube-tex.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/cube-tex.c b/cube-tex.c
+index a62d03a..2ae0e3c 100644
+--- a/cube-tex.c
++++ b/cube-tex.c
+@@ -234,7 +234,7 @@ static int get_fd_rgba(uint32_t *pstride, uint64_t *modifier)
+ 		memcpy(&map[stride * i], &src[texw * 4 * i], texw * 4);
+ 	}
+ 
+-	gbm_bo_unmap(bo, map_data);
++	//gbm_bo_unmap(bo, map_data);
+ 
+ 	fd = gbm_bo_get_fd(bo);
+ 
+@@ -269,7 +269,7 @@ static int get_fd_y(uint32_t *pstride, uint64_t *modifier)
+ 		memcpy(&map[stride * i], &src[texw * i], texw);
+ 	}
+ 
+-	gbm_bo_unmap(bo, map_data);
++	//gbm_bo_unmap(bo, map_data);
+ 
+ 	fd = gbm_bo_get_fd(bo);
+ 
+@@ -304,7 +304,7 @@ static int get_fd_uv(uint32_t *pstride, uint64_t *modifier)
+ 		memcpy(&map[stride * i], &src[texw * i], texw);
+ 	}
+ 
+-	gbm_bo_unmap(bo, map_data);
++	//gbm_bo_unmap(bo, map_data);
+ 
+ 	fd = gbm_bo_get_fd(bo);
+ 
