@@ -1,0 +1,22 @@
+From 8ccb83313aad7fd2e77d0cac048be84ed2256f2f Mon Sep 17 00:00:00 2001
+From: Gustavo Branco <guster32@gmail.com>
+Date: Sat, 4 Sep 2021 13:57:59 -0700
+Subject: [PATCH] Use correct gbm modifier for exynos
+
+---
+ gbm-wrapper.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/gbm-wrapper.c b/gbm-wrapper.c
+index 52108c1..c9ac2ee 100644
+--- a/gbm-wrapper.c
++++ b/gbm-wrapper.c
+@@ -19,7 +19,7 @@ gbm_bo_get_handle_for_plane (struct gbm_bo *bo, int plane)
+ uint64_t
+ gbm_bo_get_modifier (struct gbm_bo *bo)
+ {
+-    return DRM_FORMAT_MOD_INVALID;
++    return DRM_FORMAT_MOD_SAMSUNG_64_32_TILE;
+ }
+ 
+ uint32_t
