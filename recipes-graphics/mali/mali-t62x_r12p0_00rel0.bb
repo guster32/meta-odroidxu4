@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://END_USER_LICENCE_AGREEMENT.txt;md5=3918cc9836ad038c5a
 
 TYPE = "mali-t62x"
 
-DEPENDS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'virtual/mesa', '', d)}"
+DEPENDS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'virtual/mesa', '', d)} patchelf-native"
 
 BRANCH = "mali-t62x_r12p0_04rel0"
 SRCREV = "abf9740808ef0260e01f2277fc66c656393025e5"
@@ -23,8 +23,10 @@ do_install () {
 	fi
     if [ "${USE_WL}" = "yes" ]; then
         install ${S}/${TYPE}/wayland/libmali.so ${D}/${libdir}
+        install ${S}/${TYPE}/wayland/libmali.so ${D}/${libdir}/libgbm.so
         install ${S}/${TYPE}/wayland/liboffline_compiler_api.so ${D}/${libdir}
         install ${S}/${TYPE}/wayland/libump.so ${D}/${libdir}
+        patchelf --set-soname libgbm.so ${D}/${libdir}/libgbm.so
     fi
     if [ "${USE_DFB}" = "yes" ]; then
         install ${S}/${TYPE}/fbdev/libmali.so ${D}/${libdir}
@@ -42,8 +44,7 @@ do_install () {
     ln -sf libOpenCL.so.1 ${D}/${libdir}/libOpenCL.so
 
 	if [ "${USE_WL}" = "yes" ]; then
-		ln -sf libmali.so ${D}/${libdir}/libgbm.so.1
-		ln -sf libgbm.so.1 ${D}/${libdir}/libgbm.so
+		ln -sf libgbm.so ${D}/${libdir}/libgbm.so.1
 		ln -sf libmali.so ${D}/${libdir}/libwayland-egl.so.1
 		ln -sf libwayland-egl.so.1 ${D}/${libdir}/libwayland-egl.so
 	fi
@@ -69,7 +70,6 @@ do_install () {
     install -m 0644 ${S}/${TYPE}/pkgconfig/glesv1_cm.pc ${D}${libdir}/pkgconfig/glesv1_cm.pc
     install -m 0644 ${S}/${TYPE}/pkgconfig/ump.pc ${D}${libdir}/pkgconfig/ump.pc
 
-    install -d ${D}${libdir}
     install -d ${D}${includedir}
 }
 
