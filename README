@@ -39,3 +39,8 @@ II. Misc
 ========
 
 --- replace with specific information about the meta-odroid layer ---
+
+source oe-init-build-env 
+bitbake core-image-minimal
+sudo bmaptool copy --bmap tmp-glibc/deploy/images/odroid-xu4/core-image-minimal-odroid-xu4.wic.bmap tmp-glibc/deploy/images/odroid-xu4/core-image-minimal-odroid-xu4.wic.xz  /dev/mmcblk0
+
