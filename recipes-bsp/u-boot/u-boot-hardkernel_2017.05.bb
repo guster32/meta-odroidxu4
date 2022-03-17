@@ -44,14 +44,14 @@ EXTRA_OEMAKE = ' CROSS_COMPILE="${TOOLCHAIN_PREFIX}" \
 
 LINAROTOOLCHAIN = "4.9-2014.09"
 
-PATH_prepend = "${WORKDIR}/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin:"
+PATH:prepend = "${WORKDIR}/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin:"
  
 do_configure () {
 	oe_runmake mrproper
 	oe_runmake ${UBOOT_MACHINE}
 }
 
-do_configure_append() {
+do_configure:append() {
 	if [ -e ${WORKDIR}/boot.ini ]; then
 		cp ${WORKDIR}/boot.ini ${B}/
 	fi
@@ -64,18 +64,18 @@ do_compile () {
 	oe_runmake
 }
 
-do_compile_append () {
+do_compile:append () {
 	cp ${B}/${UBOOT_BINARY} ${S}/sd_fuse/u-boot.bin
 }
 
-do_install_append() {
+do_install:append() {
 	if [ -e ${B}/config.ini ]; then
 		install -m 644 ${B}/config.ini ${D}/boot/config-${MACHINE}-${PV}-${PR}.${UBOOT_ENV_SUFFIX}
 		ln -sf config-${MACHINE}-${PV}-${PR}.${UBOOT_ENV_SUFFIX} ${D}/boot/config.ini
 	fi
 }
 
-do_deploy_append() {
+do_deploy:append() {
 	if [ -e ${B}/config.ini ]; then
 		install -m 644 ${B}/config.ini ${DEPLOYDIR}/config-${MACHINE}-${PV}-${PR}.${UBOOT_ENV_SUFFIX}
                 rm -f ${DEPLOYDIR}/config.ini

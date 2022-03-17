@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://END_USER_LICENCE_AGREEMENT.txt;md5=3918cc9836ad038c5a
 
 TYPE = "mali-t62x"
 
-DEPENDS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'virtual/mesa', '', d)} patchelf-native"
+DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'virtual/mesa', '', d)} patchelf-native"
 
 BRANCH = "mali-t62x_r12p0_04rel0"
 SRCREV = "abf9740808ef0260e01f2277fc66c656393025e5"

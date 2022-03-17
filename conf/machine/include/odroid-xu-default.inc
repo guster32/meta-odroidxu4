@@ -4,7 +4,8 @@ require conf/machine/include/samsung-exynos.inc
 require conf/machine/include/odroid-arm-defaults.inc
 
 DEFAULTTUNE = "cortexa15thf-neon-vfpv4"
-include conf/machine/include/tune-cortexa15.inc
+include conf/machine/include/arm/armv7a/tune-cortexa15.inc
+#include conf/machine/include/tune-cortexa15.inc
 
 UBOOT_FDT_LOADADDR = "0x40800000"
 UBOOT_LOADADDR = "0x40007FC0"
@@ -14,9 +15,9 @@ UBOOT_USB_NET = "1"
 
 WKS_FILE ?= "odroid_xu-u-boot.wks"
 
-MACHINE_FEATURES_append = " alsa screen"
+MACHINE_FEATURES:append = " alsa screen"
 
-MACHINE_FEATURES_remove = " ${@bb.utils.contains("TCLIBC", "musl", "mali", "", d)}"
+MACHINE_FEATURES:remove = " ${@bb.utils.contains("TCLIBC", "musl", "mali", "", d)}"
 
 VIRTUAL-RUNTIME_mesa = "mesa"
 PREFERRED_PROVIDER_virtual/gpu ?= "${@bb.utils.contains("MACHINE_FEATURES", "mali", "mali-t62x", "mesa", d)}"
@@ -29,7 +30,7 @@ PREFERRED_PROVIDER_virtual/libopencl = "${PREFERRED_PROVIDER_virtual/gpu}"
 PREFERRED_PROVIDER_virtual/libgl = "${VIRTUAL-RUNTIME_mesa}"
 PREFERRED_PROVIDER_virtual/mesa = "${VIRTUAL-RUNTIME_mesa}"
 
-XSERVER_append = " \
+XSERVER:append = " \
     ${@bb.utils.contains('MACHINE_FEATURES', 'x11 mali', 'xf86-video-armsoc', '', d)} \
 "
 

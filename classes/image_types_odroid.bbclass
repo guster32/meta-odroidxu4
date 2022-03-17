@@ -25,7 +25,7 @@ generic_odroid_xu_wic_cmd() {
     dd if=/dev/zero of=$out${IMAGE_NAME_SUFFIX}.wic conv=notrunc count=32 bs=512 seek="2625"
 }
 
-IMAGE_CMD_wic_append_odroid-xu4() {
+IMAGE_CMD:wic:append:odroid-xu4() {
     generic_odroid_xu_wic_cmd
 }
 

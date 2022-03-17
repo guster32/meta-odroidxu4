@@ -4,7 +4,7 @@ LICENSE = "GPLv2"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-4.14:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}-4.14:"
 KBRANCH = "odroidxu4-4.14.y"
 
 SRC_URI = "git://github.com/hardkernel/linux.git;branch=${KBRANCH}"
@@ -44,7 +44,7 @@ EXTRA_OEMAKE = ' CROSS_COMPILE="${TOOLCHAIN_PREFIX}" \
 
 LINAROTOOLCHAIN = "4.9"
 
-PATH_prepend = "${WORKDIR}/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin:"
+PATH:prepend = "${WORKDIR}/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin:"
 
 require recipes-kernel/linux/linux-yocto.inc
 
