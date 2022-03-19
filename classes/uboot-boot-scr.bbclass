@@ -222,7 +222,7 @@ python create_uboot_boot_txt() {
         bb.fatal('Unable to open %s' % (cfile))
 }
 
-FILES_${PN} += "/*.${UBOOT_ENV_SUFFIX}"
+FILES:${PN} += "/*.${UBOOT_ENV_SUFFIX}"
 
 do_compile[prefuncs] += "create_uboot_boot_txt"
 

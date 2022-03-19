@@ -4,7 +4,7 @@
 #EXTRA_OEMESON += " -DMESA_EGL_NO_X11_HEADERS=enabled -DEGL_API_FB=enabled "
 CFLAGS += " -D__GBM__ "
 DEPENDS += " ${@bb.utils.contains('MACHINE_FEATURES', 'mali', 'virtual/egl', '', d)}"
-#RDEPENDS_${PN} += " libgbm"
+#RDEPENDS:${PN} += " libgbm"
 
 SRCREV = "9f63f359fab1b5d8e862508e4e51c9dfe339ccb0"
 

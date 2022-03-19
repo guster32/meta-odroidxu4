@@ -78,13 +78,13 @@ INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
 INHIBIT_PACKAGE_STRIP = "1"
 INHIBIT_SYSROOT_STRIP = "1"
 
-RREPLACES_${PN} = "libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm"
-RPROVIDES_${PN} = "libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm"
-RCONFLICTS_${PN} = "libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm"
+RREPLACES:${PN} = "libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm"
+RPROVIDES:${PN} = "libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm"
+RCONFLICTS:${PN} = "libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm"
 
-FILES_${PN} = "${libdir}/*"
+FILES:${PN} = "${libdir}/lib*.so*"
 
-#RDEPENDS_${PN} += "kernel-module-mali-t62x"
+#RDEPENDS:${PN} += "kernel-module-mali-t62x"
  
 COMPATIBLE_MACHINE = "odroid-xu4"
 
