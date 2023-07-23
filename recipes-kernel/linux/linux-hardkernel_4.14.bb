@@ -8,6 +8,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}-4.14:"
 KBRANCH = "odroidxu4-4.14.y"
 
 SRC_URI = "git://github.com/hardkernel/linux.git;branch=${KBRANCH}"
+SRC_URI += "https://dn.odroid.com/toolchains/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz"
 SRC_URI += "file://0001-Fix-Mali-Gator-in-tree-build.patch"
 SRC_URI += "file://0002-rtl8812au-do-not-Werror.patch"
 
