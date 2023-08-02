@@ -27,7 +27,7 @@ LINUX_VERSION ?= "4.14.180"
 
 HOSTTOOLS += " dtc bc "
 
-DEPENDS += " openssl dtc-native bc-native lzop-native "
+DEPENDS += " dtc-native bc-native lzop-native "
 KERNEL_EXTRA_FEATURES = ""
 
 TOOLCHAIN_PREFIX = "arm-linux-gnueabihf-"
