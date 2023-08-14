@@ -8,13 +8,14 @@ PROVIDES += "virtual/bootloader u-boot"
 
 LIC_FILES_CHKSUM = "file://Licenses/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}-2017.05:"
 BRANCH = "odroidxu4-v2017.05"
 
 UBOOT_INITIAL_ENV = ""
-SRC_URI = "\
-	git://github.com/hardkernel/u-boot.git;branch=${BRANCH} \
-    https://dn.odroid.com/toolchains/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz \
-    "
+SRC_URI = "git://github.com/hardkernel/u-boot.git;protocol=https;branch=${BRANCH} \
+	https://dn.odroid.com/toolchains/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz \
+	file://0001-tools-disable-_libfdt.so-swig-present-python-dev-mis.patch \
+	"
 SRCREV = "42ac93dcfbbb8a08c2bdc02e19f96eb35a81891a"
 
 SRC_URI[sha256sum] = "0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d4f1891"
