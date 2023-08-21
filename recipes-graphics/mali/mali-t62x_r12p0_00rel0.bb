@@ -5,11 +5,9 @@ LIC_FILES_CHKSUM = "file://END_USER_LICENCE_AGREEMENT.txt;md5=3918cc9836ad038c5a
 
 TYPE = "mali-t62x"
 
-DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'virtual/mesa', '', d)} patchelf-native"
-
 BRANCH = "mali-t62x_r12p0_04rel0"
 SRCREV = "abf9740808ef0260e01f2277fc66c656393025e5"
-SRC_URI = "git://github.com/guster32/arm-mali.git;branch=${BRANCH}"
+SRC_URI = "git://github.com/guster32/arm-mali.git;protocol=https;branch=${BRANCH}"
 
 S = "${WORKDIR}/git"
 
@@ -85,6 +83,6 @@ RCONFLICTS:${PN} = "libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm"
 FILES:${PN} = "${libdir}/lib*.so*"
 
 #RDEPENDS:${PN} += "kernel-module-mali-t62x"
- 
+
 COMPATIBLE_MACHINE = "odroid-xu4"
 

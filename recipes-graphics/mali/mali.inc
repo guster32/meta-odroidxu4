@@ -1,7 +1,7 @@
 LICENSE = "Proprietary"
 SECTION = "libs"
 
-DEPENDS += "${@bb.utils.contains("DISTRO_FEATURES", "wayland", "virtual/mesa", " ", d)}"
+DEPENDS += "${@bb.utils.contains("DISTRO_FEATURES", "wayland", "virtual/mesa", " ", d)} patchelf-native "
 DEPENDS += "${@bb.utils.contains("DISTRO_FEATURES", "x11", " virtual/libx11 libxext libdrm libxfixes libxdamage", " ", d)}"
 
 PROVIDES = "virtual/gpu"
