@@ -1,4 +1,33 @@
-require mali.inc
+LICENSE = "Proprietary"
+SECTION = "libs"
+
+DEPENDS += " virtual/mesa patchelf-native "
+DEPENDS += "${@bb.utils.contains("DISTRO_FEATURES", "x11", " virtual/libx11 libxext libdrm libxfixes libxdamage", " ", d)}"
+
+PROVIDES = " virtual/gpu virtual/egl virtual/libgles1 virtual/libgles2 virtual/libgles3 "
+PROVIDES += "${@bb.utils.contains("DISTRO_FEATURES", "wayland", " virtual/libgbm virtual/libwayland-egl ", " ", d)}"
+
+INSANE_SKIP:${PN} = "ldflags dev-so"
+INSANE_SKIP:${PN}:append:libc-musl = " file-rdeps"
+
+INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
+INHIBIT_PACKAGE_STRIP = "1"
+
+USE_X11 = "${@bb.utils.contains("DISTRO_FEATURES", "x11", "yes", "no", d)}"
+USE_DFB = "${@bb.utils.contains("DISTRO_FEATURES", "directfb", "yes", "no", d)}"
+USE_WL = "${@bb.utils.contains("DISTRO_FEATURES", "wayland", "yes", "no", d)}"
+
+do_configure[noexec] = "1"
+do_compile[noexec] = "1"
+
+# Shared libs from mali package build aren't versioned, so we need
+# to force the .so files into the runtime package (and keep them
+# out of -dev package).
+FILES_SOLIBSDEV = ""
+
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+PACKAGES = "${PN} ${PN}-dev"
+
 
 DESCRIPTION = "Mali t62x GPU Binaries for ODROID-xu3/4"
 LIC_FILES_CHKSUM = "file://END_USER_LICENCE_AGREEMENT.txt;md5=3918cc9836ad038c5a090a0280233eea"
@@ -6,7 +35,7 @@ LIC_FILES_CHKSUM = "file://END_USER_LICENCE_AGREEMENT.txt;md5=3918cc9836ad038c5a
 TYPE = "mali-t62x"
 
 BRANCH = "mali-t62x_r12p0_04rel0"
-SRCREV = "abf9740808ef0260e01f2277fc66c656393025e5"
+SRCREV = "532c057fe564e7b75479ac851f636ed31f035429"
 SRC_URI = "git://github.com/guster32/arm-mali.git;protocol=https;branch=${BRANCH}"
 
 S = "${WORKDIR}/git"
@@ -36,6 +65,8 @@ do_install () {
     ln -sf libEGL.so.1 ${D}/${libdir}/libEGL.so
     ln -sf libmali.so ${D}/${libdir}/libGLESv1_CM.so.1
     ln -sf libGLESv1_CM.so.1 ${D}/${libdir}/libGLESv1_CM.so
+    ln -sf libmali.so ${D}/${libdir}/libGLESv1.so.1
+    ln -sf libGLESv1.so.1 ${D}/${libdir}/libGLESv1.so
     ln -sf libmali.so ${D}/${libdir}/libGLESv2.so.2
     ln -sf libGLESv2.so.2 ${D}/${libdir}/libGLESv2.so
     ln -sf libmali.so ${D}/${libdir}/libOpenCL.so.1
@@ -76,11 +107,16 @@ INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
 INHIBIT_PACKAGE_STRIP = "1"
 INHIBIT_SYSROOT_STRIP = "1"
 
-RREPLACES:${PN} = "libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm"
-RPROVIDES:${PN} = "libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm"
-RCONFLICTS:${PN} = "libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgbm"
+RREPLACES:${PN} += " libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libOpenCL libGLESv2.so "
+RPROVIDES:${PN} += " libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libOpenCL libGLESv2.so "
+RCONFLICTS:${PN} = " libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libOpenCL libGLESv2.so "
 
-FILES:${PN} = "${libdir}/lib*.so*"
+RREPLACES:${PN} += "${@bb.utils.contains("DISTRO_FEATURES", "wayland", " libgbm libwayland-egl.so", " ", d)}"
+RPROVIDES:${PN} += "${@bb.utils.contains("DISTRO_FEATURES", "wayland", " libgbm libwayland-egl.so", " ", d)}"
+RCONFLICTS:${PN} += "${@bb.utils.contains("DISTRO_FEATURES", "wayland", " libgbm libwayland-egl.so", " ", d)}"
+RDEPENDS:${PN} += "${@bb.utils.contains("DISTRO_FEATURES", "wayland", " udev ", " ", d)}"
+
+FILES:${PN} += "${libdir}/lib*.so* "
 
 #RDEPENDS:${PN} += "kernel-module-mali-t62x"
 
