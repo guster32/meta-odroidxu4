@@ -19,6 +19,7 @@ do_install:append:odroid () {
         rm -f ${D}${includedir}/GLES2/gl2ext.h
         rm -f ${D}${includedir}/GLES2/gl2platform.h
         rm -f ${D}${includedir}/GLES2/gl2.h
+        rm -f ${D}${includedir}/gbm.h
 
         rm -rf ${D}${includedir}/GLES3
 

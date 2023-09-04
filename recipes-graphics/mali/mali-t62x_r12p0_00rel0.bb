@@ -35,7 +35,7 @@ LIC_FILES_CHKSUM = "file://END_USER_LICENCE_AGREEMENT.txt;md5=3918cc9836ad038c5a
 TYPE = "mali-t62x"
 
 BRANCH = "mali-t62x_r12p0_04rel0"
-SRCREV = "532c057fe564e7b75479ac851f636ed31f035429"
+SRCREV = "a0bc75c0e2be824993c6c241a0ac15acbe4b4d01"
 SRC_URI = "git://github.com/guster32/arm-mali.git;protocol=https;branch=${BRANCH}"
 
 S = "${WORKDIR}/git"
@@ -91,6 +91,7 @@ do_install () {
     install -m 0644 ${S}/${TYPE}/headers/ump/*.h ${D}${includedir}/ump/
     install -d -m 0655 ${D}${includedir}/umplock
     install -m 0644 ${S}/${TYPE}/headers/umplock/*.h ${D}${includedir}/umplock/
+    install -m 0644 ${S}/${TYPE}/headers/*.h ${D}${includedir}/
 
     install -d ${D}${libdir}/pkgconfig
     install -m 0644 ${S}/${TYPE}/pkgconfig/egl.pc ${D}${libdir}/pkgconfig/egl.pc
