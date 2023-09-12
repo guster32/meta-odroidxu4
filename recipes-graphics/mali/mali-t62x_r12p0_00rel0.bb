@@ -35,7 +35,7 @@ LIC_FILES_CHKSUM = "file://END_USER_LICENCE_AGREEMENT.txt;md5=3918cc9836ad038c5a
 TYPE = "mali-t62x"
 
 BRANCH = "mali-t62x_r12p0_04rel0"
-SRCREV = "e7ee5b119e88d08c45cf9b43cff5e799e0c68ed4"
+SRCREV = "ad27a8eec4e3d2dd3cb905bfd03baae7b015dfe5"
 SRC_URI = "git://github.com/guster32/arm-mali.git;protocol=https;branch=${BRANCH}"
 
 S = "${WORKDIR}/git"
@@ -69,6 +69,8 @@ do_install () {
     ln -sf libGLESv1.so.1 ${D}/${libdir}/libGLESv1.so
     ln -sf libmali.so ${D}/${libdir}/libGLESv2.so.2
     ln -sf libGLESv2.so.2 ${D}/${libdir}/libGLESv2.so
+    ln -sf libmali.so ${D}/${libdir}/libGLESv3.so.3
+    ln -sf libGLESv3.so.3 ${D}/${libdir}/libGLESv3.so
     ln -sf libmali.so ${D}/${libdir}/libOpenCL.so.1
     ln -sf libOpenCL.so.1 ${D}/${libdir}/libOpenCL.so
 
@@ -85,6 +87,10 @@ do_install () {
     install -m 0644 ${S}/${TYPE}/headers/GLES/*.h ${D}${includedir}/GLES/
     install -d -m 0655 ${D}${includedir}/GLES2
     install -m 0644 ${S}/${TYPE}/headers/GLES2/*.h ${D}${includedir}/GLES2/
+    install -d -m 0655 ${D}${includedir}/GLES3
+    install -m 0644 ${S}/${TYPE}/headers/GLES3/*.h ${D}${includedir}/GLES3/
+    install -d -m 0655 ${D}${includedir}/CL
+    install -m 0644 ${S}/${TYPE}/headers/CL/*.h ${D}${includedir}/CL/
     install -d -m 0655 ${D}${includedir}/KHR
     install -m 0644 ${S}/${TYPE}/headers/KHR/*.h ${D}${includedir}/KHR/
     install -d -m 0655 ${D}${includedir}/ump
@@ -108,9 +114,9 @@ INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
 INHIBIT_PACKAGE_STRIP = "1"
 INHIBIT_SYSROOT_STRIP = "1"
 
-RREPLACES:${PN} += " libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libOpenCL libGLESv2.so "
-RPROVIDES:${PN} += " libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libOpenCL libGLESv2.so "
-RCONFLICTS:${PN} = " libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libOpenCL libGLESv2.so "
+RREPLACES:${PN} += " libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgles3 libOpenCL libGLESv2.so libGLESv3.so "
+RPROVIDES:${PN} += " libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgles3 libOpenCL libGLESv2.so libGLESv3.so "
+RCONFLICTS:${PN} = " libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgles3 libOpenCL libGLESv2.so libGLESv3.so "
 
 RREPLACES:${PN} += "${@bb.utils.contains("DISTRO_FEATURES", "wayland", " libgbm libwayland-egl.so", " ", d)}"
 RPROVIDES:${PN} += "${@bb.utils.contains("DISTRO_FEATURES", "wayland", " libgbm libwayland-egl.so", " ", d)}"
