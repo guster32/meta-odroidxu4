@@ -69,8 +69,6 @@ do_install () {
     ln -sf libGLESv1.so.1 ${D}/${libdir}/libGLESv1.so
     ln -sf libmali.so ${D}/${libdir}/libGLESv2.so.2
     ln -sf libGLESv2.so.2 ${D}/${libdir}/libGLESv2.so
-    ln -sf libmali.so ${D}/${libdir}/libGLESv3.so.3
-    ln -sf libGLESv3.so.3 ${D}/${libdir}/libGLESv3.so
     ln -sf libmali.so ${D}/${libdir}/libOpenCL.so.1
     ln -sf libOpenCL.so.1 ${D}/${libdir}/libOpenCL.so
 
@@ -114,9 +112,9 @@ INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
 INHIBIT_PACKAGE_STRIP = "1"
 INHIBIT_SYSROOT_STRIP = "1"
 
-RREPLACES:${PN} += " libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgles3 libOpenCL libGLESv2.so libGLESv3.so "
-RPROVIDES:${PN} += " libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgles3 libOpenCL libGLESv2.so libGLESv3.so "
-RCONFLICTS:${PN} = " libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libgles3 libOpenCL libGLESv2.so libGLESv3.so "
+RREPLACES:${PN} += " libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libOpenCL libGLESv2.so "
+RPROVIDES:${PN} += " libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libOpenCL libGLESv2.so "
+RCONFLICTS:${PN} = " libegl libgles1 libglesv1-cm1 libgles2 libglesv2-2 libOpenCL libGLESv2.so "
 
 RREPLACES:${PN} += "${@bb.utils.contains("DISTRO_FEATURES", "wayland", " libgbm libwayland-egl.so", " ", d)}"
 RPROVIDES:${PN} += "${@bb.utils.contains("DISTRO_FEATURES", "wayland", " libgbm libwayland-egl.so", " ", d)}"
