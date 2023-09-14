@@ -35,7 +35,7 @@ LIC_FILES_CHKSUM = "file://END_USER_LICENCE_AGREEMENT.txt;md5=3918cc9836ad038c5a
 TYPE = "mali-t62x"
 
 BRANCH = "mali-t62x_r12p0_04rel0"
-SRCREV = "ad27a8eec4e3d2dd3cb905bfd03baae7b015dfe5"
+SRCREV = "940c9c0f314b37a5378903983040b7b4d9d1d327"
 SRC_URI = "git://github.com/guster32/arm-mali.git;protocol=https;branch=${BRANCH}"
 
 S = "${WORKDIR}/git"
