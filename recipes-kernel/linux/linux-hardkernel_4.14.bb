@@ -7,11 +7,13 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}-4.14:"
 KBRANCH = "odroidxu4-4.14.y"
 
+# https://www.spinics.net/lists/stable/msg692738.html
 SRC_URI = " \
 	git://github.com/hardkernel/linux.git;protocol=https;branch=${KBRANCH} \
 	https://dn.odroid.com/toolchains/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz \
 	file://0001-Fix-Mali-Gator-in-tree-build.patch \
 	file://0002-rtl8812au-do-not-Werror.patch \
+	file://0001-Updated-Assembly-directives.patch \
 	"
 
 SRCREV = "864c4519b77763274b61a035b33bc92f71084b59"

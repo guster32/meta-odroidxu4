@@ -2,6 +2,7 @@ From a14a60b773444e83f58caceb963a634198fe3f40 Mon Sep 17 00:00:00 2001
 From: Gustavo Branco <guster32@gmail.com>
 Date: Sun, 8 Aug 2021 00:34:57 -0700
 Subject: [PATCH] Add gbm wrapper
+Upstream-Status: Inappropriate [oe specific, temp hack]
 
 ---
  gbm-wrapper.c | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -71,7 +72,7 @@ index 5128766..b191b19 100644
 +++ b/meson.build
 @@ -34,6 +34,7 @@ if get_option('c_std') != 'gnu99'
  endif
- 
+
  sources = files(
 +  'gbm-wrapper.c',
    'common.c',

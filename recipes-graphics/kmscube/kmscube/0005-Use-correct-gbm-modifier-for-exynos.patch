@@ -2,6 +2,7 @@ From 8ccb83313aad7fd2e77d0cac048be84ed2256f2f Mon Sep 17 00:00:00 2001
 From: Gustavo Branco <guster32@gmail.com>
 Date: Sat, 4 Sep 2021 13:57:59 -0700
 Subject: [PATCH] Use correct gbm modifier for exynos
+Upstream-Status: Inappropriate [oe specific, temp hack]
 
 ---
  gbm-wrapper.c | 2 +-
@@ -18,5 +19,5 @@ index 52108c1..c9ac2ee 100644
 -    return DRM_FORMAT_MOD_INVALID;
 +    return DRM_FORMAT_MOD_SAMSUNG_64_32_TILE;
  }
- 
+
  uint32_t

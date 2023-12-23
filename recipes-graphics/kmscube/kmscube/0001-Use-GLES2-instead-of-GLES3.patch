@@ -2,6 +2,7 @@ From 515d33b207d2589e84609a6d1674198e8901cd92 Mon Sep 17 00:00:00 2001
 From: Gustavo Branco <guster32@gmail.com>
 Date: Sat, 7 Aug 2021 21:01:08 -0700
 Subject: [PATCH] Use GLES2 instead of GLES3
+Upstream-Status: Inappropriate [oe specific, temp hack]
 
 ---
  cube-shadertoy.c | 2 +-
@@ -14,9 +15,9 @@ index 7b148da..f20e145 100644
 @@ -34,7 +34,7 @@
  #include <sys/stat.h>
  #include <fcntl.h>
- 
+
 -#include <GLES3/gl3.h>
 +#include <GLES2/gl2.h>
- 
+
  #include "common.h"
  #include "esUtil.h"

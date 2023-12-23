@@ -1,0 +1,941 @@
+From be25221c7e97214ace0504f16a377ddac3cac6f5 Mon Sep 17 00:00:00 2001
+From: Gustavo Branco <guster32@gmail.com>
+Date: Fri, 22 Dec 2023 23:20:19 -0800
+Subject: [PATCH] Updated Assembly directives
+
+---
+ arch/arm/boot/bootp/init.S                |  2 +-
+ arch/arm/boot/compressed/big-endian.S     |  2 +-
+ arch/arm/boot/compressed/head.S           |  6 ++--
+ arch/arm/boot/compressed/piggy.S          |  2 +-
+ arch/arm/mm/proc-arm1020.S                |  4 +--
+ arch/arm/mm/proc-arm1020e.S               |  2 +-
+ arch/arm/mm/proc-arm1022.S                |  6 ++--
+ arch/arm/mm/proc-arm1026.S                |  2 +-
+ arch/arm/mm/proc-arm720.S                 |  8 ++---
+ arch/arm/mm/proc-arm740.S                 |  2 +-
+ arch/arm/mm/proc-arm7tdmi.S               |  2 +-
+ arch/arm/mm/proc-arm920.S                 |  4 +--
+ arch/arm/mm/proc-arm922.S                 |  4 +--
+ arch/arm/mm/proc-arm925.S                 |  4 +--
+ arch/arm/mm/proc-arm926.S                 |  6 ++--
+ arch/arm/mm/proc-arm940.S                 |  2 +-
+ arch/arm/mm/proc-arm946.S                 |  2 +-
+ arch/arm/mm/proc-arm9tdmi.S               |  2 +-
+ arch/arm/mm/proc-fa526.S                  |  2 +-
+ arch/arm/mm/proc-feroceon.S               |  2 +-
+ arch/arm/mm/proc-mohawk.S                 |  2 +-
+ arch/arm/mm/proc-sa110.S                  |  4 +--
+ arch/arm/mm/proc-sa1100.S                 |  4 +--
+ arch/arm/mm/proc-v6.S                     |  2 +-
+ arch/arm/mm/proc-v7.S                     |  4 +--
+ arch/arm/mm/proc-v7m.S                    |  4 +--
+ arch/arm/mm/proc-xsc3.S                   |  2 +-
+ arch/arm/mm/proc-xscale.S                 |  4 +--
+ arch/m68k/fpsp040/skeleton.S              |  4 +--
+ arch/m68k/ifpsp060/os.S                   |  4 +--
+ arch/sparc/include/asm/checksum_32.h      |  4 +--
+ arch/sparc/include/asm/futex_64.h         |  4 +--
+ arch/sparc/include/asm/uaccess_32.h       | 10 +++----
+ arch/sparc/include/asm/uaccess_64.h       |  4 +--
+ arch/sparc/kernel/ftrace.c                |  2 +-
+ arch/sparc/kernel/head_64.S               |  4 +--
+ arch/sparc/kernel/una_asm_32.S            |  4 +--
+ arch/sparc/lib/checksum_32.S              | 36 +++++++++++------------
+ arch/sparc/lib/copy_user.S                |  6 ++--
+ arch/sparc/lib/memset.S                   |  2 +-
+ arch/unicore32/boot/compressed/head.S     |  2 +-
+ arch/unicore32/boot/compressed/piggy.S.in |  2 +-
+ 42 files changed, 90 insertions(+), 90 deletions(-)
+
+diff --git a/arch/arm/boot/bootp/init.S b/arch/arm/boot/bootp/init.S
+index 78b508075161..e62cecf2f582 100644
+--- a/arch/arm/boot/bootp/init.S
++++ b/arch/arm/boot/bootp/init.S
+@@ -16,7 +16,7 @@
+  *  size immediately following the kernel, we could build this into
+  *  a binary blob, and concatenate the zImage using the cat command.
+  */
+-		.section .start,#alloc,#execinstr
++		.section .start,"ax"
+ 		.type	_start, #function
+ 		.globl	_start
+ 
+diff --git a/arch/arm/boot/compressed/big-endian.S b/arch/arm/boot/compressed/big-endian.S
+index 88e2a88d324b..0e092c36da2f 100644
+--- a/arch/arm/boot/compressed/big-endian.S
++++ b/arch/arm/boot/compressed/big-endian.S
+@@ -6,7 +6,7 @@
+  *  Author: Nicolas Pitre
+  */
+ 
+-	.section ".start", #alloc, #execinstr
++	.section ".start", "ax"
+ 
+ 	mrc	p15, 0, r0, c1, c0, 0	@ read control reg
+ 	orr	r0, r0, #(1 << 7)	@ enable big endian mode
+diff --git a/arch/arm/boot/compressed/head.S b/arch/arm/boot/compressed/head.S
+index 8ca539bdac35..5a0120c19b40 100644
+--- a/arch/arm/boot/compressed/head.S
++++ b/arch/arm/boot/compressed/head.S
+@@ -114,7 +114,7 @@
+ #endif
+ 		.endm
+ 
+-		.section ".start", #alloc, #execinstr
++		.section ".start", "ax"
+ /*
+  * sort out different calling conventions
+  */
+@@ -921,7 +921,7 @@ proc_types:
+ 		W(b)	__armv3_mpu_cache_on
+ 		W(b)	__armv3_mpu_cache_off
+ 		W(b)	__armv3_mpu_cache_flush
+-		
++
+ 		.word	0x41009400		@ ARM94x
+ 		.word	0xff00ff00
+ 		W(b)	__armv4_mpu_cache_on
+@@ -1135,7 +1135,7 @@ __armv4_mpu_cache_flush:
+ 		mcrne	p15, 0, ip, c7, c5, 0	@ invalidate I cache
+ 		mcr	p15, 0, ip, c7, c10, 4	@ drain WB
+ 		mov	pc, lr
+-		
++
+ __fa526_cache_flush:
+ 		tst	r4, #1
+ 		movne	pc, lr
+diff --git a/arch/arm/boot/compressed/piggy.S b/arch/arm/boot/compressed/piggy.S
+index 0284f84dcf38..3f43ab14a457 100644
+--- a/arch/arm/boot/compressed/piggy.S
++++ b/arch/arm/boot/compressed/piggy.S
+@@ -1,5 +1,5 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-	.section .piggydata,#alloc
++	.section .piggydata,"a"
+ 	.globl	input_data
+ input_data:
+ 	.incbin	"arch/arm/boot/compressed/piggy_data"
+diff --git a/arch/arm/mm/proc-arm1020.S b/arch/arm/mm/proc-arm1020.S
+index 774ef1323554..7c519949a6aa 100644
+--- a/arch/arm/mm/proc-arm1020.S
++++ b/arch/arm/mm/proc-arm1020.S
+@@ -422,7 +422,7 @@ ENTRY(cpu_arm1020_switch_mm)
+ 	mcr	p15, 0, r1, c8, c7, 0		@ invalidate I & D TLBs
+ #endif /* CONFIG_MMU */
+ 	ret	lr
+-        
++
+ /*
+  * cpu_arm1020_set_pte(ptep, pte)
+  *
+@@ -505,7 +505,7 @@ cpu_arm1020_name:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ 	.type	__arm1020_proc_info,#object
+ __arm1020_proc_info:
+diff --git a/arch/arm/mm/proc-arm1020e.S b/arch/arm/mm/proc-arm1020e.S
+index ae3c27b71594..928e8ca58f40 100644
+--- a/arch/arm/mm/proc-arm1020e.S
++++ b/arch/arm/mm/proc-arm1020e.S
+@@ -463,7 +463,7 @@ arm1020e_crval:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ 	.type	__arm1020e_proc_info,#object
+ __arm1020e_proc_info:
+diff --git a/arch/arm/mm/proc-arm1022.S b/arch/arm/mm/proc-arm1022.S
+index dbb2413fe04d..501744f80621 100644
+--- a/arch/arm/mm/proc-arm1022.S
++++ b/arch/arm/mm/proc-arm1022.S
+@@ -390,7 +390,7 @@ ENTRY(cpu_arm1022_switch_mm)
+ 	mcr	p15, 0, r1, c8, c7, 0		@ invalidate I & D TLBs
+ #endif
+ 	ret	lr
+-        
++
+ /*
+  * cpu_arm1022_set_pte_ext(ptep, pte, ext)
+  *
+@@ -430,7 +430,7 @@ __arm1022_setup:
+ 	 *  R
+ 	 * .RVI ZFRS BLDP WCAM
+ 	 * .011 1001 ..11 0101
+-	 * 
++	 *
+ 	 */
+ 	.type	arm1022_crval, #object
+ arm1022_crval:
+@@ -448,7 +448,7 @@ arm1022_crval:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ 	.type	__arm1022_proc_info,#object
+ __arm1022_proc_info:
+diff --git a/arch/arm/mm/proc-arm1026.S b/arch/arm/mm/proc-arm1026.S
+index 0b37b2cef9d3..29cc81857373 100644
+--- a/arch/arm/mm/proc-arm1026.S
++++ b/arch/arm/mm/proc-arm1026.S
+@@ -442,7 +442,7 @@ arm1026_crval:
+ 	string	cpu_arm1026_name, "ARM1026EJ-S"
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ 	.type	__arm1026_proc_info,#object
+ __arm1026_proc_info:
+diff --git a/arch/arm/mm/proc-arm720.S b/arch/arm/mm/proc-arm720.S
+index 3651cd70e418..6586d672e22f 100644
+--- a/arch/arm/mm/proc-arm720.S
++++ b/arch/arm/mm/proc-arm720.S
+@@ -135,7 +135,7 @@ __arm710_setup:
+ 	 *  R
+ 	 * .RVI ZFRS BLDP WCAM
+ 	 * .... 0001 ..11 1101
+-	 * 
++	 *
+ 	 */
+ 	.type	arm710_cr1_clear, #object
+ 	.type	arm710_cr1_set, #object
+@@ -163,7 +163,7 @@ __arm720_setup:
+ 	 *  R
+ 	 * .RVI ZFRS BLDP WCAM
+ 	 * ..1. 1001 ..11 1101
+-	 * 
++	 *
+ 	 */
+ 	.type	arm720_crval, #object
+ arm720_crval:
+@@ -185,8 +185,8 @@ arm720_crval:
+ /*
+  * See <asm/procinfo.h> for a definition of this structure.
+  */
+-	
+-		.section ".proc.info.init", #alloc
++
++		.section ".proc.info.init", "a"
+ 
+ .macro arm720_proc_info name:req, cpu_val:req, cpu_mask:req, cpu_name:req, cpu_flush:req
+ 		.type	__\name\()_proc_info,#object
+diff --git a/arch/arm/mm/proc-arm740.S b/arch/arm/mm/proc-arm740.S
+index 024fb7732407..6eed87103b95 100644
+--- a/arch/arm/mm/proc-arm740.S
++++ b/arch/arm/mm/proc-arm740.S
+@@ -132,7 +132,7 @@ __arm740_setup:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 	.type	__arm740_proc_info,#object
+ __arm740_proc_info:
+ 	.long	0x41807400
+diff --git a/arch/arm/mm/proc-arm7tdmi.S b/arch/arm/mm/proc-arm7tdmi.S
+index 25472d94426d..beb64a7ccb38 100644
+--- a/arch/arm/mm/proc-arm7tdmi.S
++++ b/arch/arm/mm/proc-arm7tdmi.S
+@@ -76,7 +76,7 @@ __arm7tdmi_setup:
+ 
+ 		.align
+ 
+-		.section ".proc.info.init", #alloc
++		.section ".proc.info.init", "a"
+ 
+ .macro arm7tdmi_proc_info name:req, cpu_val:req, cpu_mask:req, cpu_name:req, \
+ 	extra_hwcaps=0
+diff --git a/arch/arm/mm/proc-arm920.S b/arch/arm/mm/proc-arm920.S
+index 7a14bd4414c9..b0a5cd2e7e5e 100644
+--- a/arch/arm/mm/proc-arm920.S
++++ b/arch/arm/mm/proc-arm920.S
+@@ -430,7 +430,7 @@ __arm920_setup:
+ 	 *  R
+ 	 * .RVI ZFRS BLDP WCAM
+ 	 * ..11 0001 ..11 0101
+-	 * 
++	 *
+ 	 */
+ 	.type	arm920_crval, #object
+ arm920_crval:
+@@ -448,7 +448,7 @@ arm920_crval:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ 	.type	__arm920_proc_info,#object
+ __arm920_proc_info:
+diff --git a/arch/arm/mm/proc-arm922.S b/arch/arm/mm/proc-arm922.S
+index edccfcdcd551..61df360353a1 100644
+--- a/arch/arm/mm/proc-arm922.S
++++ b/arch/arm/mm/proc-arm922.S
+@@ -408,7 +408,7 @@ __arm922_setup:
+ 	 *  R
+ 	 * .RVI ZFRS BLDP WCAM
+ 	 * ..11 0001 ..11 0101
+-	 * 
++	 *
+ 	 */
+ 	.type	arm922_crval, #object
+ arm922_crval:
+@@ -426,7 +426,7 @@ arm922_crval:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ 	.type	__arm922_proc_info,#object
+ __arm922_proc_info:
+diff --git a/arch/arm/mm/proc-arm925.S b/arch/arm/mm/proc-arm925.S
+index 32a47cc19076..f737d66b31ba 100644
+--- a/arch/arm/mm/proc-arm925.S
++++ b/arch/arm/mm/proc-arm925.S
+@@ -473,7 +473,7 @@ __arm925_setup:
+ 	 *  R
+ 	 * .RVI ZFRS BLDP WCAM
+ 	 * .011 0001 ..11 1101
+-	 * 
++	 *
+ 	 */
+ 	.type	arm925_crval, #object
+ arm925_crval:
+@@ -491,7 +491,7 @@ arm925_crval:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ .macro arm925_proc_info name:req, cpu_val:req, cpu_mask:req, cpu_name:req, cache
+ 	.type	__\name\()_proc_info,#object
+diff --git a/arch/arm/mm/proc-arm926.S b/arch/arm/mm/proc-arm926.S
+index fb827c633693..f7e1c848b371 100644
+--- a/arch/arm/mm/proc-arm926.S
++++ b/arch/arm/mm/proc-arm926.S
+@@ -438,7 +438,7 @@ __arm926_setup:
+ #ifdef CONFIG_CPU_DCACHE_WRITETHROUGH
+ 	mov	r0, #4				@ disable write-back on caches explicitly
+ 	mcr	p15, 7, r0, c15, c0, 0
+-#endif 
++#endif
+ 
+ 	adr	r5, arm926_crval
+ 	ldmia	r5, {r5, r6}
+@@ -455,7 +455,7 @@ __arm926_setup:
+ 	 *  R
+ 	 * .RVI ZFRS BLDP WCAM
+ 	 * .011 0001 ..11 0101
+-	 * 
++	 *
+ 	 */
+ 	.type	arm926_crval, #object
+ arm926_crval:
+@@ -474,7 +474,7 @@ arm926_crval:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ 	.type	__arm926_proc_info,#object
+ __arm926_proc_info:
+diff --git a/arch/arm/mm/proc-arm940.S b/arch/arm/mm/proc-arm940.S
+index ee5b66f847c4..631ae64eeccd 100644
+--- a/arch/arm/mm/proc-arm940.S
++++ b/arch/arm/mm/proc-arm940.S
+@@ -344,7 +344,7 @@ __arm940_setup:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ 	.type	__arm940_proc_info,#object
+ __arm940_proc_info:
+diff --git a/arch/arm/mm/proc-arm946.S b/arch/arm/mm/proc-arm946.S
+index 7361837edc31..033ad7402d67 100644
+--- a/arch/arm/mm/proc-arm946.S
++++ b/arch/arm/mm/proc-arm946.S
+@@ -399,7 +399,7 @@ __arm946_setup:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 	.type	__arm946_proc_info,#object
+ __arm946_proc_info:
+ 	.long	0x41009460
+diff --git a/arch/arm/mm/proc-arm9tdmi.S b/arch/arm/mm/proc-arm9tdmi.S
+index 7fac8c612134..2195468ccd76 100644
+--- a/arch/arm/mm/proc-arm9tdmi.S
++++ b/arch/arm/mm/proc-arm9tdmi.S
+@@ -70,7 +70,7 @@ __arm9tdmi_setup:
+ 
+ 		.align
+ 
+-		.section ".proc.info.init", #alloc
++		.section ".proc.info.init", "a"
+ 
+ .macro arm9tdmi_proc_info name:req, cpu_val:req, cpu_mask:req, cpu_name:req
+ 		.type	__\name\()_proc_info, #object
+diff --git a/arch/arm/mm/proc-fa526.S b/arch/arm/mm/proc-fa526.S
+index 4001b73af4ee..fd3e5dd94e59 100644
+--- a/arch/arm/mm/proc-fa526.S
++++ b/arch/arm/mm/proc-fa526.S
+@@ -190,7 +190,7 @@ fa526_cr1_set:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ 	.type	__fa526_proc_info,#object
+ __fa526_proc_info:
+diff --git a/arch/arm/mm/proc-feroceon.S b/arch/arm/mm/proc-feroceon.S
+index 92e08bf37aad..685d324a74d3 100644
+--- a/arch/arm/mm/proc-feroceon.S
++++ b/arch/arm/mm/proc-feroceon.S
+@@ -584,7 +584,7 @@ feroceon_crval:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ .macro feroceon_proc_info name:req, cpu_val:req, cpu_mask:req, cpu_name:req, cache:req
+ 	.type	__\name\()_proc_info,#object
+diff --git a/arch/arm/mm/proc-mohawk.S b/arch/arm/mm/proc-mohawk.S
+index 6f07d2ef4ff2..9182321a586a 100644
+--- a/arch/arm/mm/proc-mohawk.S
++++ b/arch/arm/mm/proc-mohawk.S
+@@ -429,7 +429,7 @@ mohawk_crval:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ 	.type	__88sv331x_proc_info,#object
+ __88sv331x_proc_info:
+diff --git a/arch/arm/mm/proc-sa110.S b/arch/arm/mm/proc-sa110.S
+index ee2ce496239f..136bf88d3516 100644
+--- a/arch/arm/mm/proc-sa110.S
++++ b/arch/arm/mm/proc-sa110.S
+@@ -180,7 +180,7 @@ __sa110_setup:
+ 	 *  R
+ 	 * .RVI ZFRS BLDP WCAM
+ 	 * ..01 0001 ..11 1101
+-	 * 
++	 *
+ 	 */
+ 	.type	sa110_crval, #object
+ sa110_crval:
+@@ -199,7 +199,7 @@ sa110_crval:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ 	.type	__sa110_proc_info,#object
+ __sa110_proc_info:
+diff --git a/arch/arm/mm/proc-sa1100.S b/arch/arm/mm/proc-sa1100.S
+index 222d5836f666..933893a0a163 100644
+--- a/arch/arm/mm/proc-sa1100.S
++++ b/arch/arm/mm/proc-sa1100.S
+@@ -218,7 +218,7 @@ __sa1100_setup:
+ 	 *  R
+ 	 * .RVI ZFRS BLDP WCAM
+ 	 * ..11 0001 ..11 1101
+-	 * 
++	 *
+ 	 */
+ 	.type	sa1100_crval, #object
+ sa1100_crval:
+@@ -242,7 +242,7 @@ sa1100_crval:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ .macro sa1100_proc_info name:req, cpu_val:req, cpu_mask:req, cpu_name:req
+ 	.type	__\name\()_proc_info,#object
+diff --git a/arch/arm/mm/proc-v6.S b/arch/arm/mm/proc-v6.S
+index 06d890a2342b..32f4df0915ef 100644
+--- a/arch/arm/mm/proc-v6.S
++++ b/arch/arm/mm/proc-v6.S
+@@ -264,7 +264,7 @@ v6_crval:
+ 	string	cpu_elf_name, "v6"
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ 	/*
+ 	 * Match any ARMv6 processor core.
+diff --git a/arch/arm/mm/proc-v7.S b/arch/arm/mm/proc-v7.S
+index 0d8e693b6725..29a0e92dfd26 100644
+--- a/arch/arm/mm/proc-v7.S
++++ b/arch/arm/mm/proc-v7.S
+@@ -636,7 +636,7 @@ __v7_setup_stack:
+ 	string	cpu_elf_name, "v7"
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ 	/*
+ 	 * Standard v7 proc info content
+@@ -806,4 +806,4 @@ __v7_proc_info:
+ 	.long	0x000f0000		@ Mask for ID
+ 	__v7_proc __v7_proc_info, __v7_setup
+ 	.size	__v7_proc_info, . - __v7_proc_info
+-	
++
+diff --git a/arch/arm/mm/proc-v7m.S b/arch/arm/mm/proc-v7m.S
+index c68408d51c4b..4f9c074a460b 100644
+--- a/arch/arm/mm/proc-v7m.S
++++ b/arch/arm/mm/proc-v7m.S
+@@ -96,7 +96,7 @@ ENTRY(cpu_cm7_proc_fin)
+ 	ret	lr
+ ENDPROC(cpu_cm7_proc_fin)
+ 
+-	.section ".init.text", #alloc, #execinstr
++	.section ".init.text", "ax"
+ 
+ __v7m_cm7_setup:
+ 	mov	r8, #(V7M_SCB_CCR_DC | V7M_SCB_CCR_IC| V7M_SCB_CCR_BP)
+@@ -181,7 +181,7 @@ ENDPROC(__v7m_setup)
+ 	string cpu_elf_name "v7m"
+ 	string cpu_v7m_name "ARMv7-M"
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ .macro __v7m_proc name, initfunc, cache_fns = nop_cache_fns, hwcaps = 0,  proc_fns = v7m_processor_functions
+ 	.long	0			/* proc_info_list.__cpu_mm_mmu_flags */
+diff --git a/arch/arm/mm/proc-xsc3.S b/arch/arm/mm/proc-xsc3.S
+index 293dcc2c441f..da96e4de1353 100644
+--- a/arch/arm/mm/proc-xsc3.S
++++ b/arch/arm/mm/proc-xsc3.S
+@@ -499,7 +499,7 @@ xsc3_crval:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ .macro xsc3_proc_info name:req, cpu_val:req, cpu_mask:req
+ 	.type	__\name\()_proc_info,#object
+diff --git a/arch/arm/mm/proc-xscale.S b/arch/arm/mm/proc-xscale.S
+index 3d75b7972fd1..627847eb425c 100644
+--- a/arch/arm/mm/proc-xscale.S
++++ b/arch/arm/mm/proc-xscale.S
+@@ -580,7 +580,7 @@ __xscale_setup:
+ 	 *  R
+ 	 * .RVI ZFRS BLDP WCAM
+ 	 * ..11 1.01 .... .101
+-	 * 
++	 *
+ 	 */
+ 	.type	xscale_crval, #object
+ xscale_crval:
+@@ -613,7 +613,7 @@ xscale_crval:
+ 
+ 	.align
+ 
+-	.section ".proc.info.init", #alloc
++	.section ".proc.info.init", "a"
+ 
+ .macro xscale_proc_info name:req, cpu_val:req, cpu_mask:req, cpu_name:req, cache
+ 	.type	__\name\()_proc_info,#object
+diff --git a/arch/m68k/fpsp040/skeleton.S b/arch/m68k/fpsp040/skeleton.S
+index a8f41615d94a..31a9c634c81e 100644
+--- a/arch/m68k/fpsp040/skeleton.S
++++ b/arch/m68k/fpsp040/skeleton.S
+@@ -499,12 +499,12 @@ in_ea:
+ 	dbf	%d0,morein
+ 	rts
+ 
+-	.section .fixup,#alloc,#execinstr
++	.section .fixup,"ax"
+ 	.even
+ 1:
+ 	jbra	fpsp040_die
+ 
+-	.section __ex_table,#alloc
++	.section __ex_table,"a"
+ 	.align	4
+ 
+ 	.long	in_ea,1b
+diff --git a/arch/m68k/ifpsp060/os.S b/arch/m68k/ifpsp060/os.S
+index 7a0d6e428066..89e2ec224ab6 100644
+--- a/arch/m68k/ifpsp060/os.S
++++ b/arch/m68k/ifpsp060/os.S
+@@ -379,11 +379,11 @@ _060_real_access:
+ 
+ 
+ | Execption handling for movs access to illegal memory
+-	.section .fixup,#alloc,#execinstr
++	.section .fixup,"ax"
+ 	.even
+ 1:	moveq		#-1,%d1
+ 	rts
+-.section __ex_table,#alloc
++.section __ex_table,"a"
+ 	.align 4
+ 	.long	dmrbuae,1b
+ 	.long	dmrwuae,1b
+diff --git a/arch/sparc/include/asm/checksum_32.h b/arch/sparc/include/asm/checksum_32.h
+index d1e53d7aed39..6d76fdcd8184 100644
+--- a/arch/sparc/include/asm/checksum_32.h
++++ b/arch/sparc/include/asm/checksum_32.h
+@@ -69,7 +69,7 @@ csum_partial_copy_from_user(const void __user *src, void *dst, int len,
+ 	register __wsum s asm("g7") = sum;
+ 
+ 	__asm__ __volatile__ (
+-	".section __ex_table,#alloc\n\t"
++	".section __ex_table,\"a\"\n\t"
+ 	".align 4\n\t"
+ 	".word 1f,2\n\t"
+ 	".previous\n"
+@@ -97,7 +97,7 @@ csum_partial_copy_to_user(const void *src, void __user *dst, int len,
+ 		register __wsum s asm("g7") = sum;
+ 
+ 		__asm__ __volatile__ (
+-		".section __ex_table,#alloc\n\t"
++		".section __ex_table,\"a\"\n\t"
+ 		".align 4\n\t"
+ 		".word 1f,1\n\t"
+ 		".previous\n"
+diff --git a/arch/sparc/include/asm/futex_64.h b/arch/sparc/include/asm/futex_64.h
+index 0865ce77ec00..125928af5327 100644
+--- a/arch/sparc/include/asm/futex_64.h
++++ b/arch/sparc/include/asm/futex_64.h
+@@ -15,7 +15,7 @@
+ 	"	bne,pn	%%icc, 1b\n"			\
+ 	"	 mov	0, %0\n"			\
+ 	"3:\n"						\
+-	"	.section .fixup,#alloc,#execinstr\n"	\
++	"	.section .fixup,\"ax\"\n"	\
+ 	"	.align	4\n"				\
+ 	"4:	sethi	%%hi(3b), %0\n"			\
+ 	"	jmpl	%0 + %%lo(3b), %%g0\n"		\
+@@ -77,7 +77,7 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
+ 	__asm__ __volatile__(
+ 	"\n1:	casa	[%4] %%asi, %3, %1\n"
+ 	"2:\n"
+-	"	.section .fixup,#alloc,#execinstr\n"
++	"	.section .fixup,\"ax\"\n"
+ 	"	.align	4\n"
+ 	"3:	sethi	%%hi(2b), %0\n"
+ 	"	jmpl	%0 + %%lo(2b), %%g0\n"
+diff --git a/arch/sparc/include/asm/uaccess_32.h b/arch/sparc/include/asm/uaccess_32.h
+index de71c65b99f0..405f95f09739 100644
+--- a/arch/sparc/include/asm/uaccess_32.h
++++ b/arch/sparc/include/asm/uaccess_32.h
+@@ -150,13 +150,13 @@ __asm__ __volatile__(							\
+ 	"1:\t"	"st"#size " %1, %2\n\t"					\
+ 		"clr	%0\n"						\
+ 	"2:\n\n\t"							\
+-		".section .fixup,#alloc,#execinstr\n\t"			\
++		".section .fixup,\"ax\"\n\t"			\
+ 		".align	4\n"						\
+ 	"3:\n\t"							\
+ 		"b	2b\n\t"						\
+ 		" mov	%3, %0\n\t"					\
+ 		".previous\n\n\t"					\
+-		".section __ex_table,#alloc\n\t"			\
++		".section __ex_table,\"a\"\n\t"			\
+ 		".align	4\n\t"						\
+ 		".word	1b, 3b\n\t"					\
+ 		".previous\n\n\t"					\
+@@ -218,14 +218,14 @@ __asm__ __volatile__(							\
+ 	"1:\t"	"ld"#size " %2, %1\n\t"					\
+ 		"clr	%0\n"						\
+ 	"2:\n\n\t"							\
+-		".section .fixup,#alloc,#execinstr\n\t"			\
++		".section .fixup,\"ax\"\n\t"			\
+ 		".align	4\n"						\
+ 	"3:\n\t"							\
+ 		"clr	%1\n\t"						\
+ 		"b	2b\n\t"						\
+ 		" mov	%3, %0\n\n\t"					\
+ 		".previous\n\t"						\
+-		".section __ex_table,#alloc\n\t"			\
++		".section __ex_table,\"a\"\n\t"			\
+ 		".align	4\n\t"						\
+ 		".word	1b, 3b\n\n\t"					\
+ 		".previous\n\t"						\
+@@ -254,7 +254,7 @@ static inline unsigned long __clear_user(void __user *addr, unsigned long size)
+ 	unsigned long ret;
+ 
+ 	__asm__ __volatile__ (
+-		".section __ex_table,#alloc\n\t"
++		".section __ex_table,\"a\"\n\t"
+ 		".align 4\n\t"
+ 		".word 1f,3\n\t"
+ 		".previous\n\t"
+diff --git a/arch/sparc/include/asm/uaccess_64.h b/arch/sparc/include/asm/uaccess_64.h
+index cbb308cee394..bfcbed14ef74 100644
+--- a/arch/sparc/include/asm/uaccess_64.h
++++ b/arch/sparc/include/asm/uaccess_64.h
+@@ -120,7 +120,7 @@ __asm__ __volatile__(							\
+ 	"1:\t"	"st"#size "a %1, [%2] %%asi\n\t"			\
+ 		"clr	%0\n"						\
+ 	"2:\n\n\t"							\
+-		".section .fixup,#alloc,#execinstr\n\t"			\
++		".section .fixup,\"ax\"\n\t"			\
+ 		".align	4\n"						\
+ 	"3:\n\t"							\
+ 		"sethi	%%hi(2b), %0\n\t"				\
+@@ -159,7 +159,7 @@ __asm__ __volatile__(							\
+ 	"1:\t"	"ld"#size "a [%2] %%asi, %1\n\t"			\
+ 		"clr	%0\n"						\
+ 	"2:\n\n\t"							\
+-		".section .fixup,#alloc,#execinstr\n\t"			\
++		".section .fixup,\"ax\"\n\t"			\
+ 		".align	4\n"						\
+ 	"3:\n\t"							\
+ 		"sethi	%%hi(2b), %0\n\t"				\
+diff --git a/arch/sparc/kernel/ftrace.c b/arch/sparc/kernel/ftrace.c
+index 915dda4ae412..ff9f8b6207b8 100644
+--- a/arch/sparc/kernel/ftrace.c
++++ b/arch/sparc/kernel/ftrace.c
+@@ -33,7 +33,7 @@ static int ftrace_modify_code(unsigned long ip, u32 old, u32 new)
+ 	"	flush	%[ip]\n"
+ 	"	mov	0, %[faulted]\n"
+ 	"2:\n"
+-	"	.section .fixup,#alloc,#execinstr\n"
++	"	.section .fixup,\"ax\"\n"
+ 	"	.align	4\n"
+ 	"3:	sethi	%%hi(2b), %[faulted]\n"
+ 	"	jmpl	%[faulted] + %%lo(2b), %%g0\n"
+diff --git a/arch/sparc/kernel/head_64.S b/arch/sparc/kernel/head_64.S
+index 9e293de12052..be7845684b66 100644
+--- a/arch/sparc/kernel/head_64.S
++++ b/arch/sparc/kernel/head_64.S
+@@ -458,7 +458,7 @@ EXPORT_SYMBOL(sun4v_chip_type)
+ 	cmp	%g2, CPU_ID_NIAGARA2
+ 	be,pt	%xcc, 5f
+ 	 mov	SUN4V_CHIP_NIAGARA2, %g4
+-	
++
+ 4:
+ 	/* Athena */
+ 	sethi	%hi(prom_cpu_compatible), %g1
+@@ -947,7 +947,7 @@ swapper_4m_tsb:
+ prom_tba:	.xword	0
+ tlb_type:	.word	0	/* Must NOT end up in BSS */
+ EXPORT_SYMBOL(tlb_type)
+-	.section	".fixup",#alloc,#execinstr
++	.section	".fixup","ax"
+ 
+ ENTRY(__retl_efault)
+ 	retl
+diff --git a/arch/sparc/kernel/una_asm_32.S b/arch/sparc/kernel/una_asm_32.S
+index f8bf839289fb..030b6f2c3da9 100644
+--- a/arch/sparc/kernel/una_asm_32.S
++++ b/arch/sparc/kernel/una_asm_32.S
+@@ -58,7 +58,7 @@ __do_int_store:
+ 0:	retl
+ 	 mov	0, %o0
+ 
+-	.section __ex_table,#alloc
++	.section __ex_table,"a"
+ 	.word	4b, retl_efault
+ 	.word	5b, retl_efault
+ 	.word	6b, retl_efault
+@@ -137,7 +137,7 @@ do_int_load:
+ 0:	retl
+ 	 mov	0, %o0
+ 
+-	.section __ex_table,#alloc
++	.section __ex_table,"a"
+ 	.word	4b, retl_efault
+ 	.word	5b, retl_efault
+ 	.word	6b, retl_efault
+diff --git a/arch/sparc/lib/checksum_32.S b/arch/sparc/lib/checksum_32.S
+index 6a5469c97246..890b17bae0b1 100644
+--- a/arch/sparc/lib/checksum_32.S
++++ b/arch/sparc/lib/checksum_32.S
+@@ -403,32 +403,32 @@ ccdbl:	CSUMCOPY_BIGCHUNK_ALIGNED(%o0,%o1,%g7,0x00,%o4,%o5,%g2,%g3,%g4,%g5,%o2,%o
+ ccslow:	cmp	%g1, 0
+ 	mov	0, %g5
+ 	bleu	4f
+-	 andcc	%o0, 1, %o5		
++	 andcc	%o0, 1, %o5
+ 	be,a	1f
+-	 srl	%g1, 1, %g4		
+-	sub	%g1, 1, %g1	
++	 srl	%g1, 1, %g4
++	sub	%g1, 1, %g1
+ 	EX(ldub	[%o0], %g5, add %g1, 1)
+-	add	%o0, 1, %o0	
++	add	%o0, 1, %o0
+ 	EX2(stb	%g5, [%o1])
+ 	srl	%g1, 1, %g4
+ 	add	%o1, 1, %o1
+-1:	cmp	%g4, 0		
++1:	cmp	%g4, 0
+ 	be,a	3f
+ 	 andcc	%g1, 1, %g0
+-	andcc	%o0, 2, %g0	
++	andcc	%o0, 2, %g0
+ 	be,a	1f
+ 	 srl	%g4, 1, %g4
+ 	EX(lduh	[%o0], %o4, add %g1, 0)
+-	sub	%g1, 2, %g1	
++	sub	%g1, 2, %g1
+ 	srl	%o4, 8, %g2
+-	sub	%g4, 1, %g4	
++	sub	%g4, 1, %g4
+ 	EX2(stb	%g2, [%o1])
+ 	add	%o4, %g5, %g5
+ 	EX2(stb	%o4, [%o1 + 1])
+-	add	%o0, 2, %o0	
++	add	%o0, 2, %o0
+ 	srl	%g4, 1, %g4
+ 	add	%o1, 2, %o1
+-1:	cmp	%g4, 0		
++1:	cmp	%g4, 0
+ 	be,a	2f
+ 	 andcc	%g1, 2, %g0
+ 	EX3(ld	[%o0], %o4)
+@@ -450,21 +450,21 @@ ccslow:	cmp	%g1, 0
+ 	srl	%g5, 16, %g5
+ 	srl	%g2, 16, %g2
+ 	andcc	%g1, 2, %g0
+-	add	%g2, %g5, %g5 
+-2:	be,a	3f		
++	add	%g2, %g5, %g5
++2:	be,a	3f
+ 	 andcc	%g1, 1, %g0
+ 	EX(lduh	[%o0], %o4, and %g1, 3)
+ 	andcc	%g1, 1, %g0
+ 	srl	%o4, 8, %g2
+-	add	%o0, 2, %o0	
++	add	%o0, 2, %o0
+ 	EX2(stb	%g2, [%o1])
+ 	add	%g5, %o4, %g5
+ 	EX2(stb	%o4, [%o1 + 1])
+ 	add	%o1, 2, %o1
+-3:	be,a	1f		
++3:	be,a	1f
+ 	 sll	%g5, 16, %o4
+ 	EX(ldub	[%o0], %g2, add %g0, 1)
+-	sll	%g2, 8, %o4	
++	sll	%g2, 8, %o4
+ 	EX2(stb	%g2, [%o1])
+ 	add	%g5, %o4, %g5
+ 	sll	%g5, 16, %o4
+@@ -479,7 +479,7 @@ ccslow:	cmp	%g1, 0
+ 	sll	%g2, 8, %g2
+ 	or	%g2, %o4, %g5
+ 4:	addcc	%g7, %g5, %g7
+-	retl	
++	retl
+ 	 addx	%g0, %g7, %o0
+ __csum_partial_copy_end:
+ 
+@@ -563,7 +563,7 @@ __csum_partial_copy_end:
+         call    lookup_fault
+ 	 mov	%g7, %i4
+ 	cmp	%o0, 2
+-	bne	1f	
++	bne	1f
+ 	 add	%g0, -EFAULT, %i5
+ 	tst	%i2
+ 	be	2f
+@@ -587,7 +587,7 @@ __csum_partial_copy_end:
+ 	ret
+ 	 restore
+ 
+-        .section __ex_table,#alloc
++        .section __ex_table,"a"
+         .align 4
+         .word 5b,2
+ 	.word 6b,2
+diff --git a/arch/sparc/lib/copy_user.S b/arch/sparc/lib/copy_user.S
+index dc72f2b970b7..83b451fc3036 100644
+--- a/arch/sparc/lib/copy_user.S
++++ b/arch/sparc/lib/copy_user.S
+@@ -275,7 +275,7 @@ cannot_optimize:
+ 
+ 	bne	byte_chunk
+ 	 and	%o2, 0xfffffff0, %o3
+-	 
++
+ 	andcc	%o1, 1, %g0
+ 	be	10f
+ 	 nop
+@@ -298,7 +298,7 @@ cannot_optimize:
+ 	 add	%o0, 0x10, %o0
+ 	b	2f
+ 	 and	%o2, 0xe, %o3
+-	
++
+ byte_chunk:
+ 	MOVE_SHORTCHUNK(o1, o0, -0x02, g2, g3)
+ 	MOVE_SHORTCHUNK(o1, o0, -0x04, g2, g3)
+@@ -360,7 +360,7 @@ short_aligned_end:
+ 	b	copy_user_last7
+ 	 mov	%o2, %g1
+ 
+-	.section .fixup,#alloc,#execinstr
++	.section .fixup,"ax"
+ 	.align	4
+ 97:
+ 	mov	%o2, %g3
+diff --git a/arch/sparc/lib/memset.S b/arch/sparc/lib/memset.S
+index b89d42b29e34..8e9b213b273d 100644
+--- a/arch/sparc/lib/memset.S
++++ b/arch/sparc/lib/memset.S
+@@ -183,7 +183,7 @@ __bzero:
+ 	 clr	%o0
+ __memset_end:
+ 
+-	.section .fixup,#alloc,#execinstr
++	.section .fixup,"ax"
+ 	.align	4
+ 20:
+ 	cmp	%g2, 8
+diff --git a/arch/unicore32/boot/compressed/head.S b/arch/unicore32/boot/compressed/head.S
+index fbd1e374c685..2fd3b6b588d0 100644
+--- a/arch/unicore32/boot/compressed/head.S
++++ b/arch/unicore32/boot/compressed/head.S
+@@ -16,7 +16,7 @@
+ #define cand	cmpand
+ #define nop8	nop; nop; nop; nop; nop; nop; nop; nop
+ 
+-		.section ".start", #alloc, #execinstr
++		.section ".start","ax"
+ 		.text
+ start:
+ 		.type	start,#function
+diff --git a/arch/unicore32/boot/compressed/piggy.S.in b/arch/unicore32/boot/compressed/piggy.S.in
+index b79704d58026..80c735d7cc21 100644
+--- a/arch/unicore32/boot/compressed/piggy.S.in
++++ b/arch/unicore32/boot/compressed/piggy.S.in
+@@ -1,4 +1,4 @@
+-	.section .piggydata,#alloc
++	.section .piggydata,"a"
+ 	.globl	input_data
+ input_data:
+ 	.incbin	"arch/unicore32/boot/compressed/piggy.DECOMP_SUFFIX"
+-- 
+2.42.0
+

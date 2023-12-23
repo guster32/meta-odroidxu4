@@ -2,6 +2,7 @@ From 3d518d0e39d328f588ffbd50cb443222734b0983 Mon Sep 17 00:00:00 2001
 From: Gustavo Branco <guster32@gmail.com>
 Date: Sun, 8 Aug 2021 00:01:24 -0700
 Subject: [PATCH] More GLES2
+Upstream-Status: Inappropriate [oe specific, temp hack]
 
 ---
  perfcntrs.c | 2 +-
@@ -14,9 +15,9 @@ index 555a1b1..ad53175 100644
 @@ -30,7 +30,7 @@
  #include <stdlib.h>
  #include <string.h>
- 
+
 -#include <GLES3/gl3.h>
 +#include <GLES2/gl2.h>
- 
+
  #include "common.h"
- 
+

@@ -2,6 +2,7 @@ From 383101986e4bb4c779cde4764b6f3a4ac0505144 Mon Sep 17 00:00:00 2001
 From: Gustavo Branco <guster32@gmail.com>
 Date: Sat, 7 Aug 2021 23:50:32 -0700
 Subject: [PATCH] More
+Upstream-Status: Inappropriate [oe specific, temp hack]
 
 ---
  meson.build | 9 ---------
@@ -13,7 +14,7 @@ index 8c0079b..186037a 100644
 +++ b/meson.build
 @@ -85,12 +85,3 @@ else
  endif
- 
+
  executable('kmscube', sources, dependencies : dep_common, install : true)
 -
 -
